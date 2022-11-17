@@ -8,7 +8,7 @@ import java.util.Properties;
 
 public class DBConnection {
     private static Connection connect=null;
-    private String userName, password, serverName, portNumber, dbName;
+    private static String dbName="testpersonne";
 
     public static synchronized Connection getConnection(){
         if(connect==null)
@@ -19,8 +19,6 @@ public class DBConnection {
             String serverName = "localhost";
             //Attention, sous MAMP, le port est 8889
             String portNumber = "3306";
-
-            String dbName="testpersonne";
 
             // iL faut une base nommee testPersonne !
 
@@ -39,7 +37,9 @@ public class DBConnection {
         return connect;
     }
 
-    public void setNomDB(String nomDB){
-        this.dbName=nomDB;
+    public static void setNomDB(String nomDB){
+        dbName=nomDB;
+        connect=null;
+        getConnection();
     }
 }
