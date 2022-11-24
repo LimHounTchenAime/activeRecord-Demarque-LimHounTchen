@@ -43,7 +43,7 @@ public class Personne {
         String queryString = "SELECT * FROM personne WHERE ID = ?";
         PreparedStatement stmt = connect.prepareStatement(queryString);
         stmt.setInt(1,id);
-        ResultSet rs = stmt.executeQuery(queryString);
+        ResultSet rs = stmt.executeQuery();
         if(rs.next()){
             p = new Personne(rs.getString("NOM"),rs.getString("PRENOM"));
             p.id = rs.getInt("ID");
@@ -56,7 +56,7 @@ public class Personne {
 
         String queryString = "SELECT * FROM personne WHERE NOM = ?";
         PreparedStatement stmt = connect.prepareStatement(queryString);
-        ResultSet rs = stmt.executeQuery(queryString);
+        ResultSet rs = stmt.executeQuery();
         ArrayList<Personne> tab = new ArrayList<>();
         Personne p = null;
         while(rs.next()){
