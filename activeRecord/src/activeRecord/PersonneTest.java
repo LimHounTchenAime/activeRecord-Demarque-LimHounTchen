@@ -66,6 +66,8 @@ class PersonneTest {
         }
 
     }
+	
+	//Enleve ce commentaire Aimé
 
     @Test
     void delete() throws SQLException {
