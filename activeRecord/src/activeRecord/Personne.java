@@ -15,9 +15,15 @@ public class Personne {
         prenom=p;
     }
 
+
     public int getId(){
         return id;
     }
+    public String getNom() {return nom;}
+    public String getPrenom() {return prenom;}
+
+    public void setNom(String nom) {this.nom=nom;}
+    public void setPrenom(String prenom) {this.prenom=prenom;}
 
     public static ArrayList<Personne> findAll() throws SQLException {
         Connection connect=DBConnection.getConnection();
@@ -56,6 +62,7 @@ public class Personne {
 
         String queryString = "SELECT * FROM personne WHERE NOM = ?";
         PreparedStatement stmt = connect.prepareStatement(queryString);
+        stmt.setString(1,name);
         ResultSet rs = stmt.executeQuery();
         ArrayList<Personne> tab = new ArrayList<>();
         Personne p = null;
@@ -69,8 +76,11 @@ public class Personne {
 
     public static void createTable() throws SQLException{
         Connection connect=DBConnection.getConnection();
-        String createString = "CREATE TABLE personne ( " + "ID INTEGER  AUTO_INCREMENT, "
-                + "NOM varchar(40) NOT NULL, " + "PRENOM varchar(40) NOT NULL, " + "PRIMARY KEY (ID))";
+        String createString = "CREATE TABLE IF NOT EXISTS personne ( \n" +
+                "ID INTEGER NOT NULL AUTO_INCREMENT, \n" +
+                "NOM varchar(40) NOT NULL, \n" +
+                "PRENOM varchar(40) NOT NULL, \n" +
+                "PRIMARY KEY (ID))";
         Statement stmt = connect.createStatement();
         stmt.executeUpdate(createString);
     }
@@ -111,13 +121,17 @@ public class Personne {
         stmt = connect.prepareStatement(query);
         stmt.setString(1,this.nom);
         stmt.setString(2,this.prenom);
-        this.id = stmt.executeQuery().getInt("ID");
+        ResultSet rs = stmt.executeQuery();
+        if(rs.next()){
+            this.id = rs.getInt("ID");
+        }
+
     }
 
     private void update() throws SQLException {
         Connection connect = DBConnection.getConnection();
-        String query = "UPDATE personne" +
-                "SET NOM=?,PRENOM=?" +
+        String query = "UPDATE personne \n" +
+                "SET NOM=?,PRENOM=? \n" +
                 "WHERE ID=?";
         PreparedStatement stmt = connect.prepareStatement(query);
         stmt.setString(1, this.nom);
